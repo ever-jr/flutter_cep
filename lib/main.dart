@@ -25,8 +25,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: const Text('Pegue as informações do seu CEP'),
+        title: const Text('Informações do seu CEP'),
       ),
       body: const Center(
           child: Column(
@@ -40,14 +41,16 @@ class HomePage extends StatelessWidget {
 
 class Address {
   final String? street;
+  final String? neighborhood;
   final String? city;
   final String? state;
 
-  Address({this.street, this.city, this.state});
+  Address({this.street, this.neighborhood, this.city, this.state});
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
       street: json['street'],
+      neighborhood: json['neighborhood'],
       city: json['city'],
       state: json['state'],
     );
@@ -100,6 +103,7 @@ class _SearchCepState extends State<SearchCep> {
           Row(
             children: [
               Expanded(
+                flex: 3,
                 child: TextField(
                   controller: _cep,
                   decoration: const InputDecoration(
@@ -109,9 +113,18 @@ class _SearchCepState extends State<SearchCep> {
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: _handleButtonClick,
-                child: const Text('Procurar'),
+              Expanded(
+                flex: 1,
+                child: TextButton(
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                    fixedSize: MaterialStateProperty.all(const Size(0, 40)),
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    overlayColor: MaterialStateProperty.all(Colors.blue[300]),
+                  ),
+                  onPressed: _handleButtonClick,
+                  child: const Text('Procurar'),
+                ),
               ),
             ],
           ),
@@ -149,6 +162,7 @@ class CepInfo extends StatelessWidget {
       child: Column(
         children: [
           InfoRow(column1: 'Rua', column2: '${address.street}'),
+          InfoRow(column1: 'Bairro', column2: '${address.neighborhood}'),
           InfoRow(column1: 'Cidade', column2: '${address.city}'),
           InfoRow(column1: 'Estado', column2: '${address.state}'),
         ],
@@ -173,8 +187,8 @@ class InfoRow extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(.3),
             spreadRadius: .5,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            blurRadius: 3,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
